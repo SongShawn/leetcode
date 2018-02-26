@@ -1,10 +1,67 @@
 package leetcode
 
+import (
+	"math"
+)
+
 // 思路：
-// 以较长数组为基准，取中间值longMed
-// 以二分法在较短数组中找到最后一个小于longMed的值的索引i
-// 短数组[0,i]会放到长数组的左边，(i,n)放到长数组的右边
-// 根据左右两边添加数据个数的差值修正longMed的索引即可
+// A B两个数组
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+
+	len1 := len(nums1)
+	len2 := len(nums2)
+	shortLen := len1
+	longLen := len2
+	shortNums := nums1
+	longNums := nums2
+	if len1 == 0 && len2 == 0 {
+		return 0.0
+	}
+
+	if len1 > len2 {
+		shortLen = len2
+		longLen = len1
+		shortNums = nums2
+		longNums = nums1
+	}
+
+	totalLen := len1 + len2
+	for i := 1; i < shortLen+1; i++ {
+		var j int
+		if totalLen&1 == 0 {
+			j = (totalLen)/2 - i
+		} else {
+			j = (totalLen-1)/2 - i
+		}
+
+		if j < longLen && i < shortLen {
+			if shortNums[i-1] <= longNums[j] && longNums[j-1] <= shortNums[i] {
+				if totalLen&1 == 0 { // 偶数长度
+					return (math.Max(float64(shortNums[i-1]), float64(longNums[j-1])) +
+						math.Min(float64(shortNums[i]), float64(longNums[j]))) / 2
+				} else { // 基数长度
+					return math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
+				}
+			}
+		} else if i < shortLen {
+			if longNums[j-1] <= shortNums[i] {
+				if totalLen&1 == 0 { // 偶数长度
+					return (math.Max(float64(shortNums[i-1]), float64(longNums[j-1])) +
+						float64(shortNums[i])) / 2
+				} else { // 基数长度
+					return math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
+				}
+			}
+		} else if j < longLen {
+			if totalLen&1 == 0 { // 偶数长度
+				return (math.Max(float64(shortNums[i-1]), float64(longNums[j-1])) +
+					float64(longNums[j])) / 2
+			} else { // 基数长度
+				return math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
+			}
+		}
+
+	}
+
 	return 0.0
 }
