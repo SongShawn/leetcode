@@ -1,6 +1,7 @@
 package leetcode
 
 import (
+	"expvar"
 	"math"
 )
 
@@ -31,6 +32,7 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	}
 
 	totalLen := len1 + len2
+	var maxLeft, minRight float64
 	for i := 1; i < shortLen+1; i++ {
 		j := (totalLen+1)/2 - i
 
@@ -45,25 +47,25 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 				}
 			}
 		} else if i == shortLen {
-			if j == 0 { // 个数相等且一组数据都大于另一组数据
-				if shortNums[0] >= longNums[longLen-1] {
-					return (float64(longNums[longLen-1]) + float64(shortNums[0])) / 2
-				} else if shortNums[longLen-1] <= longNums[0] {
-					return (float64(shortNums[longLen-1]) + float64(longNums[0])) / 2
-				}
-			} else if shortNums[i-1] <= longNums[j] {
+			if shortNums[i-1] > longNums[j] {
 				if totalLen&1 == 0 { // 偶数长度
-					return (math.Max(float64(shortNums[i-1]), float64(longNums[j-1])) +
-						float64(longNums[j])) / 2
+					maxLeft = math.Max(float64(shortNums[i-2]), float64(longNums[j]))
+					minRight = math.Min(float64(shortNums[i-1]), float64(longNums[j+1]))
 				} else { // 奇数长度
-					return math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
+
 				}
 			} else {
-				if totalLen&1 == 0 {
-					return (float64(longNums[(totalLen+1)/2-1]) + math.Min(float64(shortNums[0]),
-						float64(longNums[(totalLen+1)/2])))
+				if j == 0 {
+					maxLeft = float64(shortNums[i-1])
+					minRight = float64(longNums[0])
 				} else {
-					return float64(longNums[(totalLen+1)/2-1])
+					if totalLen&1 == 0 {
+						maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
+						minRight = float64(longNums[j])
+					} else {
+						minRight = float64(longNums[j])
+						maxLeft = minRight
+					}
 				}
 			}
 		}
