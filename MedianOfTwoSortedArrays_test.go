@@ -34,4 +34,15 @@ func TestMedianOfTSA00(t *testing.T) {
 		t.Error(nums1, nums2)
 	}
 
+	nums1 = []int{10, 23, 34, 45, 56}
+	nums2 = []int{1, 2, 3}
+	if 16.5 != findMedianSortedArrays(nums1, nums2) {
+		t.Error(nums1, nums2)
+	}
+
+	nums1 = []int{10}
+	nums2 = []int{10}
+	if 10 != findMedianSortedArrays(nums1, nums2) {
+		t.Error(nums1, nums2)
+	}
 }
