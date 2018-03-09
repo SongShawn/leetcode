@@ -49,26 +49,24 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 		// i < shortLen ---> j > 0
 		if i < shortLen {
 			if shortNums[i-1] <= longNums[j] && longNums[j-1] <= shortNums[i] {
+				maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 				if totalLen&1 == 0 { // 偶数长度
-					maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 					minRight = math.Min(float64(shortNums[i]), float64(longNums[j]))
 				} else { // 奇数长度
-					maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 					minRight = maxLeft
 				}
 				break
 			}
 		} else if i == shortLen {
 			if shortNums[i-1] > longNums[j] {
+				maxLeft = float64(longNums[(totalLen+1)/2-1])
 				if totalLen&1 == 0 { // 偶数长度
-					maxLeft = float64(longNums[(totalLen+1)/2-1])
 					if (totalLen+1)/2 == longLen {
 						minRight = float64(shortNums[0])
 					} else {
 						minRight = math.Min(float64(shortNums[0]), float64(longNums[(totalLen+1)/2]))
 					}
 				} else { // 奇数长度
-					maxLeft = float64(longNums[(totalLen+1)/2-1])
 					minRight = maxLeft
 				}
 			} else {
@@ -76,11 +74,10 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 					maxLeft = float64(shortNums[i-1])
 					minRight = float64(longNums[0])
 				} else {
+					maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 					if totalLen&1 == 0 {
-						maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 						minRight = float64(longNums[j])
 					} else {
-						maxLeft = math.Max(float64(shortNums[i-1]), float64(longNums[j-1]))
 						minRight = maxLeft
 					}
 				}
