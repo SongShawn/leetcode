@@ -22,6 +22,18 @@ func StringSliceEqual(a, b []int) bool {
 	return true
 }
 
+func TestAAAA(t *testing.T) {
+
+}
+
+func Test00(t *testing.T) {
+
+}
+
+func Test11(t *testing.T) {
+
+}
+
 func TestTwoNum00(t *testing.T) {
 
 	except := []int{0, 1}
